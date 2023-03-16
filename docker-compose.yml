@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  data-porter.api:
+    image: ${DOCKER_REGISTRY-}dataporterapi
+    build:
+      context: .
+      dockerfile: data-porter.Api/data-porter.Api/Dockerfile
