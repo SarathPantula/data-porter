@@ -1,7 +1,9 @@
-version: '3.4'
+version: '3.9'
 
 services:
   data-porter.api:
+    container_name: "data-porter.api"
+    hostname: "data-porter.api"
     image: ${DOCKER_REGISTRY-}dataporterapi
     build:
       context: .
