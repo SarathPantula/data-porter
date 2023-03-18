@@ -1,0 +1,16 @@
+{
+    "id": 123,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "555-555-1234",
+    "address": {
+      "street": "123 Main St",
+      "city": "Anytown",
+      "state": "CA",
+      "zip": "12345"
+    },
+    "hireDate": "2022-03-18T08:00:00Z",
+    "salary": 75000.00,
+    "department": "Engineering"
+  }

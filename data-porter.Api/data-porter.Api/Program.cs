@@ -1,6 +1,6 @@
 using core.Extensions.StartUpExtensions;
+using data_porter.Api.Extensions;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,14 +10,9 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 builder.Logging.ClearProviders();
-
-builder.Host.UseSerilog((hostname, services, configuration) =>
+builder.Host.UseSerilog((hostName, configuration) =>
 {
-    configuration
-    .WriteTo.File("Logs/data-porter.log",
-    restrictedToMinimumLevel: LogEventLevel.Debug,
-    rollingInterval: RollingInterval.Day)
-    .WriteTo.Console();
+    builder.Services.RegisterSerilogLogging(builder.Configuration, hostName, configuration);
 });
 
 // Add services to the container.
@@ -36,6 +31,8 @@ builder.Services.ConfigureBaseExtensions(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.RegisterAPIServices();
 
 builder.Services.AddHttpClient();
 
