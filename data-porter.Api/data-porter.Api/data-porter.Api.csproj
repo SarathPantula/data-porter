@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\core\core\core.csproj" />
+    <ProjectReference Include="..\data-porter.Managers\data-porter.Managers.csproj" />
   </ItemGroup>
 
 </Project>
