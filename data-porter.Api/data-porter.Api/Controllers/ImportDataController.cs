@@ -1,4 +1,5 @@
 ﻿using data_porter.Managers.AzureBlobs;
+using data_porter.Models.AzureBlobs.Upload;
 using Microsoft.AspNetCore.Mvc;
 
 namespace data_porter.Api.Controllers;
@@ -30,11 +31,11 @@ public class ImportDataController : ControllerBase
     [HttpPost]
     [Route("upload")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ImportData([FromForm] IFormFile file)
+    public async Task<IActionResult> ImportData([FromForm] Request request)
     {
         try
         {
-            return Ok(await _azureBlobManager.Upload(file));
+            return Ok(await _azureBlobManager.Upload(request.File));
         }
         catch (Exception ex)
         {
