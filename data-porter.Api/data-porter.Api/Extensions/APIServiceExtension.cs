@@ -1,5 +1,7 @@
 ﻿using data_porter.Managers.AzureBlobs;
+using data_porter.Models.AzureBlobs.Upload;
 using data_porter.Repositories.AzureBlobs;
+using MediatR;
 
 namespace data_porter.Api.Extensions;
 
@@ -22,7 +24,8 @@ public static class APIServiceExtension
 
     private static IServiceCollection RegisterAzureBlobServices(IServiceCollection services)
     {
-        services.AddScoped<IAzureBlobManager, AzureBlobManager>();
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(UploadRequest)));
+        services.AddScoped<IRequestHandler<UploadRequest, UploadResponse>, UploadHandler>();
         services.AddScoped<IAzureBlobRepository, AzureBlobRepository>();
 
         return services;

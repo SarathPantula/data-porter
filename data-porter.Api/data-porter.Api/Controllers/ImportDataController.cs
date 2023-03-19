@@ -1,5 +1,5 @@
-﻿using data_porter.Managers.AzureBlobs;
-using data_porter.Models.AzureBlobs.Upload;
+﻿using data_porter.Models.AzureBlobs.Upload;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace data_porter.Api.Controllers;
@@ -11,31 +11,36 @@ namespace data_porter.Api.Controllers;
 [ApiController]
 public class ImportDataController : ControllerBase
 {
-    private readonly IAzureBlobManager _azureBlobManager;
     private readonly ILogger<ImportDataController> _logger;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public ImportDataController(IAzureBlobManager azureBlobManager,
-        ILogger<ImportDataController> logger)
+    public ImportDataController(ILogger<ImportDataController> logger,
+        IMediator mediator)
     {
-        _azureBlobManager = azureBlobManager;
         _logger = logger;
+        _mediator = mediator;
     }
 
     /// <summary>
-    /// 
+    /// Imports a file, a file can be of csv, xlsx, json 
     /// </summary>
     /// <returns></returns>
     [HttpPost]
     [Route("upload")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ImportData([FromForm] Request request)
+    public async Task<IActionResult> ImportData([FromForm] UploadRequest request)
     {
         try
         {
-            return Ok(await _azureBlobManager.Upload(request.File));
+            var response = await _mediator.Send(request);
+
+            if (response.Errors is not null && response.Errors.Any())
+                return BadRequest(response);
+
+            return Ok(response );
         }
         catch (Exception ex)
         {
@@ -43,29 +48,4 @@ public class ImportDataController : ControllerBase
             throw;
         }
     }
-
-    ///// <summary>
-    ///// Download File
-    ///// </summary>
-    ///// <param name="id"></param>
-    ///// <returns></returns>
-    //[HttpGet("files/{id}")]
-    //public async Task<IActionResult> DownloadFile(string id)
-    //{
-    //    // Get the file from Azure Blob Storage using its ID
-    //    CloudBlockBlob blob = _blobContainer.GetBlockBlobReference(id);
-
-    //    if (!await blob.ExistsAsync())
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    // Set the response headers
-    //    Response.Headers.Add("Content-Disposition", $"attachment; filename={blob.Name}");
-    //    Response.Headers.Add("Content-Type", blob.Properties.ContentType);
-
-    //    // Download the file and return it as a stream
-    //    Stream stream = await blob.OpenReadAsync();
-    //    return File(stream, blob.Properties.ContentType, blob.Name);
-    //}
 }

@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace data_porter.Models.AzureBlobs.Upload;
 
 /// <summary>
 /// Request
 /// </summary>
-public class Request
+public class UploadRequest : IRequest<UploadResponse>
 {
     /// <summary>
     /// File name
