@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\data-porter.cache\data-porter.cache.csproj" />
+    <ProjectReference Include="..\data-porter.Validators\data-porter.Validators.csproj" />
   </ItemGroup>
 
 </Project>
