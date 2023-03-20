@@ -1,7 +1,7 @@
-﻿using data_porter.Managers.AzureBlobs;
-using data_porter.Models.AzureBlobs.Upload;
+﻿using data_porter.cache.AzureBlobs;
+using data_porter.Processor.AzureBlobs;
 using data_porter.Repositories.AzureBlobs;
-using MediatR;
+using data_porter.Validators.AzureBlobs;
 
 namespace data_porter.Api.Extensions;
 
@@ -24,9 +24,20 @@ public static class APIServiceExtension
 
     private static IServiceCollection RegisterAzureBlobServices(IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(UploadRequest)));
-        services.AddScoped<IRequestHandler<UploadRequest, UploadResponse>, UploadHandler>();
-        services.AddScoped<IAzureBlobRepository, AzureBlobRepository>();
+        services.AddScoped<AzureBlobRepository>();
+        services.AddScoped<AzureBlobCache>();
+        services.AddScoped<AzureBlobValidator>();
+
+        services.AddScoped<IAzureBlobRepository>(provider =>
+        {
+            IAzureBlobRepository azureBlobRepository = provider.GetRequiredService<AzureBlobRepository>();
+            IAzureBlobRepository azureBlobCache = new AzureBlobCache(azureBlobRepository);
+            IAzureBlobRepository azureBlobValidator = new AzureBlobValidator(azureBlobCache);
+
+            return azureBlobValidator;
+        });
+
+        services.AddScoped<IAzureBlobProcessor, AzureBlobProcessor>();
 
         return services;
     }

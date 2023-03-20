@@ -28,7 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\data-porter.Managers\data-porter.Managers.csproj" />
+    <ProjectReference Include="..\data-porter.cache\data-porter.cache.csproj" />
+    <ProjectReference Include="..\data-porter.Processor\data-porter.Processor.csproj" />
+    <ProjectReference Include="..\data-porter.Validators\data-porter.Validators.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using data_porter.Models.AzureBlobs.Upload;
+using Microsoft.AspNetCore.Http;
 
 namespace data_porter.Repositories.AzureBlobs;
 
@@ -11,7 +12,6 @@ public interface IAzureBlobRepository
     /// Upload File
     /// </summary>
     /// <param name="fileId">File ID</param>
-    /// <param name="contentType">Content type</param>
-    /// <param name="file">File</param>
-    Task Upload(string fileId, string contentType, IFormFile file);
+    /// <param name="file">File Implements <see cref="IFormFile"/></param>
+    Task<UploadResponse> Upload(string fileId, IFormFile file);
 }

@@ -1,4 +1,6 @@
 ﻿using data_porter.Models.AzureBlobs.Upload;
+using data_porter.Processor.AzureBlobs;
+using data_porter.Repositories.AzureBlobs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,39 +14,39 @@ namespace data_porter.Api.Controllers;
 public class ImportDataController : ControllerBase
 {
     private readonly ILogger<ImportDataController> _logger;
-    private readonly IMediator _mediator;
-
+    private readonly IAzureBlobProcessor _azureBlobProcessor;
     /// <summary>
     /// ctor
     /// </summary>
     public ImportDataController(ILogger<ImportDataController> logger,
-        IMediator mediator)
+        IAzureBlobProcessor azureBlobProcessor)
     {
         _logger = logger;
-        _mediator = mediator;
+        _azureBlobProcessor = azureBlobProcessor;
     }
 
     /// <summary>
     /// Imports a file, a file can be of csv, xlsx, json 
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Returns <see cref="UploadResponse"/></returns>
     [HttpPost]
     [Route("upload")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ImportData([FromForm] UploadRequest request)
     {
         try
         {
-            var response = await _mediator.Send(request);
+            var response = await _azureBlobProcessor.Upload(request);
 
             if (response.Errors is not null && response.Errors.Any())
                 return BadRequest(response);
 
-            return Ok(response );
+            return Ok(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message, ex);
+            _logger.LogError($"An error occured while validating the JSON {ex.Message}", ex);
             throw;
         }
     }
