@@ -23,7 +23,9 @@ public class AzureBlobProcessor : IAzureBlobProcessor
         var fileId = Guid.NewGuid().ToString();
 
         var response = await _target.Upload(fileId, request.File);
+        if(response.Errors.Any())
+            return new UploadResponse(response.Errors);
 
-        return new UploadResponse(fileId, response.Errors);
+        return new UploadResponse(fileId);
     }
 }
