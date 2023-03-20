@@ -1,16 +1,16 @@
 ﻿using core.Models.DefaultResponses;
 
-namespace data_porter.Models.AzureBlobs.Upload;
+namespace data_porter.Models.Models.Upload.AzureBlobs;
 
 /// <summary>
 /// Upload Response
 /// </summary>
-public class UploadResponse : IDefaultResponse
+public class AzureBlobResponse : IDefaultResponse
 {
     /// <summary>
     /// ctor
     /// </summary>
-    public UploadResponse()
+    public AzureBlobResponse()
     {
     }
 
@@ -18,7 +18,7 @@ public class UploadResponse : IDefaultResponse
     /// ctor
     /// </summary>
     /// <param name="fileId">File Id</param>
-    public UploadResponse(string fileId)
+    public AzureBlobResponse(string fileId)
     {
         FileId = fileId;
     }
@@ -26,7 +26,7 @@ public class UploadResponse : IDefaultResponse
     /// ctor
     /// </summary>
     /// <param name="errors">List of Errors. <see cref="List{ErrorInfo}"/></param>
-    public UploadResponse(List<ErrorInfo> errors)
+    public AzureBlobResponse(List<ErrorInfo> errors)
     {
         Errors = errors;
     }
@@ -36,7 +36,7 @@ public class UploadResponse : IDefaultResponse
     /// </summary>
     /// <param name="fileId">File Id</param>
     /// <param name="errors">List of Errors. <see cref="List{ErrorInfo}"/></param>
-    public UploadResponse(string fileId, List<ErrorInfo> errors)
+    public AzureBlobResponse(string fileId, List<ErrorInfo> errors)
     {
         FileId = fileId;
         Errors = errors;

@@ -1,5 +1,7 @@
 using core.Extensions.StartUpExtensions;
 using data_porter.Api.Extensions;
+using data_porter.Models.DBModels;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +33,8 @@ builder.Services.ConfigureBaseExtensions(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<DbContext, DataPorterContext>().AddDbContext<DataPorterContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnectionString")));
 
 builder.Services.RegisterAPIServices();
 

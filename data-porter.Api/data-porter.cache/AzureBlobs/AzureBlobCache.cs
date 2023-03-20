@@ -1,4 +1,4 @@
-﻿using data_porter.Models.AzureBlobs.Upload;
+﻿using data_porter.Models.Models.Upload.AzureBlobs;
 using data_porter.Repositories.AzureBlobs;
 using Microsoft.AspNetCore.Http;
 
@@ -19,7 +19,7 @@ public class AzureBlobCache : AzureBlobDecorator
     }
 
     /// inheritdoc
-    public override Task<UploadResponse> Upload(string fileId, IFormFile file)
+    public override Task<AzureBlobResponse> Upload(string fileId, IFormFile file)
     {
         return _target.Upload(fileId, file);
     }

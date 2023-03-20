@@ -1,7 +1,8 @@
 ﻿using core.Extensions;
 using core.Models.DefaultResponses;
-using data_porter.Models.AzureBlobs.Upload;
 using data_porter.Models.Enums;
+using data_porter.Models.Models.Upload.AzureBlobs;
+using data_porter.Repositories.AzureBlobReferences;
 using data_porter.Repositories.AzureBlobs;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
@@ -25,14 +26,14 @@ public class AzureBlobValidator : AzureBlobDecorator
     }
 
     /// inheritdoc
-    public override async Task<UploadResponse> Upload(string fileId, IFormFile file)
+    public override async Task<AzureBlobResponse> Upload(string fileId, IFormFile file)
     {
         List<ErrorInfo> errors = new();
         if (file is null)
         {
             errors.Add(new ErrorInfo((int)ErrorCode.FileCannotBeNull, ErrorCode.FileCannotBeNull.GetDescription()));
 
-            return new UploadResponse(errors);
+            return new AzureBlobResponse(errors);
         }
 
         if (file.ContentType.Contains("application/json"))
@@ -41,13 +42,13 @@ public class AzureBlobValidator : AzureBlobDecorator
             {
                 errors.Add(new ErrorInfo((int)ErrorCode.InvalidJson, ErrorCode.InvalidJson.GetDescription()));
 
-                return new UploadResponse(errors);
+                return new AzureBlobResponse(errors);
             }
         }
 
         await _target.Upload(fileId, file);
 
-        return new UploadResponse(errors);
+        return new AzureBlobResponse(errors);
     }
 
     private async static Task<bool> ValidateJson(IFormFile file)

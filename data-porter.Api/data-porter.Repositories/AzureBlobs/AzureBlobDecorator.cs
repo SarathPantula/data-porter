@@ -1,4 +1,4 @@
-﻿using data_porter.Models.AzureBlobs.Upload;
+﻿using data_porter.Models.Models.Upload.AzureBlobs;
 using Microsoft.AspNetCore.Http;
 
 namespace data_porter.Repositories.AzureBlobs;
@@ -9,5 +9,5 @@ namespace data_porter.Repositories.AzureBlobs;
 public abstract class AzureBlobDecorator : IAzureBlobRepository
 {
     ///inheritdoc
-    public abstract Task<UploadResponse> Upload(string fileId, IFormFile file);
+    public abstract Task<AzureBlobResponse> Upload(string fileId, IFormFile file);
 }

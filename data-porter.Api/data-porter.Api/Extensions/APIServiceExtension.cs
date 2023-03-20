@@ -1,7 +1,11 @@
-﻿using data_porter.cache.AzureBlobs;
+﻿using data_porter.cache.AzureBlobReferences;
+using data_porter.cache.AzureBlobs;
 using data_porter.Processor.AzureBlobs;
+using data_porter.Repositories.AzureBlobReferences;
 using data_porter.Repositories.AzureBlobs;
+using data_porter.Validators.AzureBlobReferences;
 using data_porter.Validators.AzureBlobs;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace data_porter.Api.Extensions;
 
@@ -18,6 +22,7 @@ public static class APIServiceExtension
     public static IServiceCollection RegisterAPIServices(this IServiceCollection services)
     {
         RegisterAzureBlobServices(services);
+        RegisterAzureBlobReferenceServices(services);
 
         return services;
     }
@@ -38,6 +43,24 @@ public static class APIServiceExtension
         });
 
         services.AddScoped<IAzureBlobProcessor, AzureBlobProcessor>();
+
+        return services;
+    }
+
+    private static IServiceCollection RegisterAzureBlobReferenceServices(IServiceCollection services)
+    {
+        services.AddScoped<AzureBlobReferenceRepository>();
+        services.AddScoped<AzureBlobReferenceCache>();
+        services.AddScoped<AzureBlobReferenceValidator>();
+
+        services.AddScoped<IAzureBlobReferenceRepository>(provider =>
+        {
+            IAzureBlobReferenceRepository azureBlobReferenceRepository = provider.GetRequiredService<AzureBlobReferenceRepository>();
+            IAzureBlobReferenceRepository azureBlobReferenceCache = new AzureBlobReferenceCache(azureBlobReferenceRepository);
+            IAzureBlobReferenceRepository azureBlobReferenceValidator = new AzureBlobReferenceValidator(azureBlobReferenceCache);
+
+            return azureBlobReferenceValidator;
+        });
 
         return services;
     }

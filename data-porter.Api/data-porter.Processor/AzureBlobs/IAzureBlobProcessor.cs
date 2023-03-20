@@ -1,4 +1,5 @@
-﻿using data_porter.Models.AzureBlobs.Upload;
+﻿using data_porter.Models.Models.Upload;
+using data_porter.Models.Models.Upload.AzureBlobs;
 
 namespace data_porter.Processor.AzureBlobs;
 /// <summary>

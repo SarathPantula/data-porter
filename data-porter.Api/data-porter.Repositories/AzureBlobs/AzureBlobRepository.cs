@@ -1,5 +1,5 @@
 ﻿using core.Models.AppSettings;
-using data_porter.Models.AzureBlobs.Upload;
+using data_porter.Models.Models.Upload.AzureBlobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
@@ -28,7 +28,7 @@ public class AzureBlobRepository : AzureBlobDecorator
     }
 
     ///inheritdoc
-    public override async Task<UploadResponse> Upload(string fileId, IFormFile file)
+    public override async Task<AzureBlobResponse> Upload(string fileId, IFormFile file)
     {
         CloudBlockBlob blockBlob = _blobContainer.GetBlockBlobReference(fileId);
         blockBlob.Properties.ContentType = file.ContentType;
@@ -36,6 +36,6 @@ public class AzureBlobRepository : AzureBlobDecorator
         using Stream stream = file.OpenReadStream();
         await blockBlob.UploadFromStreamAsync(stream);
 
-        return new UploadResponse();
+        return new AzureBlobResponse();
     }
 }
