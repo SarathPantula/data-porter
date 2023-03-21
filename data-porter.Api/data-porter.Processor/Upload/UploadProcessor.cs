@@ -32,7 +32,7 @@ public class UploadProcessor : IUploadProcessor
         if(azureBlobresponse.Errors.Any())
             return new UploadResponse(azureBlobresponse.Errors);
 
-        return await _azureBlobReferenceRepo.SaveAzureBlobReference(
+        var azureBlobReferenceResponse = await _azureBlobReferenceRepo.SaveAzureBlobReference(
             new AzureBlobReference
         {
             Id = fileId,
@@ -40,5 +40,9 @@ public class UploadProcessor : IUploadProcessor
             FileSize = request.File.Length,
             FileType = request.File.ContentType
         });
+        if(azureBlobReferenceResponse.Errors.Any())
+            return new UploadResponse(azureBlobReferenceResponse.Errors);
+
+        return azureBlobReferenceResponse;
     }
 }
