@@ -1,6 +1,5 @@
 ﻿using data_porter.Models.DBModels;
 using data_porter.Models.Models.Upload;
-using data_porter.Models.Models.Upload.AzureBlobs;
 using data_porter.Repositories.AzureBlobReferences;
 using data_porter.Repositories.AzureBlobs;
 
@@ -9,7 +8,7 @@ namespace data_porter.Processor.AzureBlobs;
 /// <summary>
 /// Azure Blob Processor
 /// </summary>
-public class AzureBlobProcessor : IAzureBlobProcessor
+public class UploadProcessor : IUploadProcessor
 {
     private readonly IAzureBlobRepository _azureBlobRepo;
     private readonly IAzureBlobReferenceRepository _azureBlobReferenceRepo;
@@ -17,7 +16,7 @@ public class AzureBlobProcessor : IAzureBlobProcessor
     /// <summary>
     /// ctor
     /// </summary>
-    public AzureBlobProcessor(IAzureBlobRepository azureBlobRepo,
+    public UploadProcessor(IAzureBlobRepository azureBlobRepo,
         IAzureBlobReferenceRepository azureBlobReferenceRepo)
     {
         _azureBlobRepo = azureBlobRepo;

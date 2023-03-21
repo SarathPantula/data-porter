@@ -42,7 +42,7 @@ public static class APIServiceExtension
             return azureBlobValidator;
         });
 
-        services.AddScoped<IAzureBlobProcessor, AzureBlobProcessor>();
+        services.AddScoped<IUploadProcessor, UploadProcessor>();
 
         return services;
     }

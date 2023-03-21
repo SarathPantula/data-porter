@@ -5,7 +5,7 @@ namespace data_porter.Processor.AzureBlobs;
 /// <summary>
 /// IAzure Blob Processor
 /// </summary>
-public interface IAzureBlobProcessor
+public interface IUploadProcessor
 {
     /// <summary>
     /// Upload

@@ -1,8 +1,5 @@
 ﻿using data_porter.Models.Models.Upload;
-using data_porter.Models.Models.Upload.AzureBlobs;
 using data_porter.Processor.AzureBlobs;
-using data_porter.Repositories.AzureBlobs;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace data_porter.Api.Controllers;
@@ -15,15 +12,18 @@ namespace data_porter.Api.Controllers;
 public class ImportDataController : ControllerBase
 {
     private readonly ILogger<ImportDataController> _logger;
-    private readonly IAzureBlobProcessor _azureBlobProcessor;
+    private readonly IUploadProcessor _uploadProcessor;
+
     /// <summary>
     /// ctor
     /// </summary>
+    /// <param name="logger">Implements <see cref="ILogger{ImportDataController}"/></param>
+    /// <param name="uploadProcessor">Upload Processor <see cref="IUploadProcessor"/></param>
     public ImportDataController(ILogger<ImportDataController> logger,
-        IAzureBlobProcessor azureBlobProcessor)
+        IUploadProcessor uploadProcessor)
     {
         _logger = logger;
-        _azureBlobProcessor = azureBlobProcessor;
+        _uploadProcessor = uploadProcessor;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class ImportDataController : ControllerBase
     {
         try
         {
-            var response = await _azureBlobProcessor.Upload(request);
+            var response = await _uploadProcessor.Upload(request);
 
             if (response.Errors is not null && response.Errors.Any())
                 return BadRequest(response);
