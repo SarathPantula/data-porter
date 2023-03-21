@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 create table if not exists azure_blob_reference(
 	id uuid not null constraint pk_tenant_id primary key,
 	file_name varchar(200) not null,

@@ -1,10 +1,13 @@
 ﻿using data_porter.cache.AzureBlobReferences;
 using data_porter.cache.AzureBlobs;
+using data_porter.cache.CreateEntities;
 using data_porter.Processor.AzureBlobs;
 using data_porter.Repositories.AzureBlobReferences;
 using data_porter.Repositories.AzureBlobs;
+using data_porter.Repositories.CreateEntities;
 using data_porter.Validators.AzureBlobReferences;
 using data_porter.Validators.AzureBlobs;
+using data_porter.Validators.CreateEntities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace data_porter.Api.Extensions;
@@ -23,6 +26,7 @@ public static class APIServiceExtension
     {
         RegisterAzureBlobServices(services);
         RegisterAzureBlobReferenceServices(services);
+        RegisterCreateEntityServices(services);
 
         return services;
     }
@@ -60,6 +64,24 @@ public static class APIServiceExtension
             IAzureBlobReferenceRepository azureBlobReferenceValidator = new AzureBlobReferenceValidator(azureBlobReferenceCache);
 
             return azureBlobReferenceValidator;
+        });
+
+        return services;
+    }
+
+    private static IServiceCollection RegisterCreateEntityServices(IServiceCollection services)
+    {
+        services.AddScoped<CreateEntityRepository>();
+        services.AddScoped<CreateEntityCache>();
+        services.AddScoped<CreateEntityValidator>();
+
+        services.AddScoped<ICreateEntityRepositoty>(provider =>
+        {
+            ICreateEntityRepositoty createEntityRepository = provider.GetRequiredService<CreateEntityRepository>();
+            ICreateEntityRepositoty createEntityCache = new CreateEntityCache(createEntityRepository);
+            ICreateEntityRepositoty createEntityValidator = new CreateEntityValidator(createEntityCache);
+
+            return createEntityValidator;
         });
 
         return services;
