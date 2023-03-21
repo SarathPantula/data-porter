@@ -22,11 +22,11 @@ public class AzureBlobReferenceValidator : AzureBlobReferenceDecorator
     {
         _target = target;
     }
-    
+
     /// <inheritdoc />
     public override async Task<UploadResponse> SaveAzureBlobReference(AzureBlobReference azureBlobReference)
     {
-        if (azureBlobReference.FileName is null) 
+        if (azureBlobReference.FileName is null)
             return new UploadResponse(new List<ErrorInfo> { new ErrorInfo((int)ErrorCode.FileNameCannotBeLeftBlank, ErrorCode.FileNameCannotBeLeftBlank.GetDescription()) });
 
         return await _target.SaveAzureBlobReference(azureBlobReference);

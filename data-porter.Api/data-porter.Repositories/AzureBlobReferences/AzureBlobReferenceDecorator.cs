@@ -8,6 +8,6 @@ namespace data_porter.Repositories.AzureBlobReferences;
 /// </summary>
 public abstract class AzureBlobReferenceDecorator : IAzureBlobReferenceRepository
 {
-    ///inheritdoc
+    /// <inheritdoc/>
     public abstract Task<UploadResponse> SaveAzureBlobReference(AzureBlobReference azureBlobReference);
 }

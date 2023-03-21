@@ -27,7 +27,7 @@ public class AzureBlobRepository : AzureBlobDecorator
         _blobContainer = blobClient.GetContainerReference(azureBlobSettings.Value.ContainerName);
     }
 
-    ///inheritdoc
+    /// <inheritdoc/>
     public override async Task<AzureBlobResponse> Upload(string fileId, IFormFile file)
     {
         CloudBlockBlob blockBlob = _blobContainer.GetBlockBlobReference(fileId);

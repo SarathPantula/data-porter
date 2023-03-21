@@ -24,7 +24,7 @@ public class AzureBlobProcessor : IAzureBlobProcessor
         _azureBlobReferenceRepo = azureBlobReferenceRepo;
     }
 
-    ///inheritdoc
+    /// <inheritdoc/>
     public async Task<UploadResponse> Upload(UploadRequest request)
     {
         var fileId = Guid.NewGuid();

@@ -8,6 +8,6 @@ namespace data_porter.Repositories.AzureBlobs;
 /// </summary>
 public abstract class AzureBlobDecorator : IAzureBlobRepository
 {
-    ///inheritdoc
+    /// <inheritdoc/>
     public abstract Task<AzureBlobResponse> Upload(string fileId, IFormFile file);
 }

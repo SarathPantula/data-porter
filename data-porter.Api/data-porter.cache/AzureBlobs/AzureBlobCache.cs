@@ -18,7 +18,7 @@ public class AzureBlobCache : AzureBlobDecorator
         _target = target;
     }
 
-    /// inheritdoc
+    /// <inheritdoc/>
     public override Task<AzureBlobResponse> Upload(string fileId, IFormFile file)
     {
         return _target.Upload(fileId, file);
