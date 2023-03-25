@@ -70,7 +70,7 @@ public class CreateEntityRepository : CreateEntityDecorator
             using NpgsqlCommand insertCommand = new NpgsqlCommand(insertQuery.ToString(), connection);
             foreach (var property in item.Properties())
             {
-                insertCommand.Parameters.AddWithValue(property.Name, Convert.ToString(property.Value)!);
+                insertCommand.Parameters.AddWithValue(property.Name, property.Value);
             }
 
             await insertCommand.ExecuteNonQueryAsync();
