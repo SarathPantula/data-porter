@@ -1,5 +1,6 @@
 ﻿using core.Models.AppSettings;
 using data_porter.Models.Models.Upload.CreateEntities;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using System.Text;
@@ -16,10 +17,10 @@ public class CreateEntityRepository : CreateEntityDecorator
     /// <summary>
     /// ctor
     /// </summary>
-    /// <param name="connectionStringSettings">Connection String Settings. Implements <see cref="ConnectionStringSettings"/></param>
-    public CreateEntityRepository(ConnectionStringSettings connectionStringSettings)
+    /// <param name="connectionStringSettings">Connection String Settings. Implements <see cref="IOptions{ConnectionStringSettings}"/></param>
+    public CreateEntityRepository(IOptions<ConnectionStringSettings> connectionStringSettings)
     {
-        _connectionString = connectionStringSettings.PostgresConnectionString;
+        _connectionString = connectionStringSettings.Value.PostgresConnectionString;
     }
 
     /// <inheritdoc/>
@@ -28,13 +29,14 @@ public class CreateEntityRepository : CreateEntityDecorator
         using NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync();
 
+        var tableName = fileName.Replace('-', '_');
         // Drop the table if it exists
-        using NpgsqlCommand dropTableCommand = new NpgsqlCommand("DROP TABLE IF EXISTS people;", connection);
-        await dropTableCommand.ExecuteNonQueryAsync();
+        //using NpgsqlCommand dropTableCommand = new NpgsqlCommand($"DROP TABLE IF EXISTS {tableName};", connection);
+        //await dropTableCommand.ExecuteNonQueryAsync();
 
         // Create the table dynamically
         JObject firstObject = (jsonArray[0] as JObject)!;
-        StringBuilder createTableQuery = new StringBuilder($"CREATE TABLE {fileName} (id uuid not null constraint pk_{fileName}_id PRIMARY KEY");
+        StringBuilder createTableQuery = new StringBuilder($"CREATE TABLE {tableName} (uuid uuid not null constraint pk_{tableName}_uuid PRIMARY KEY");
 
         foreach (var property in firstObject.Properties())
         {
@@ -51,7 +53,7 @@ public class CreateEntityRepository : CreateEntityDecorator
         // Insert the data from the dynamic list into the table
         foreach (JObject item in jsonArray)
         {
-            StringBuilder insertQuery = new StringBuilder("INSERT INTO people (");
+            StringBuilder insertQuery = new StringBuilder($"INSERT INTO {tableName} (");
             StringBuilder columnNames = new StringBuilder();
             StringBuilder columnValues = new StringBuilder();
 
@@ -74,7 +76,7 @@ public class CreateEntityRepository : CreateEntityDecorator
             await insertCommand.ExecuteNonQueryAsync();
         }
 
-        return new CreateEntityResponse(fileName);
+        return new CreateEntityResponse(tableName);
     }
 
     private static string GetColumnType(JTokenType tokenType)
